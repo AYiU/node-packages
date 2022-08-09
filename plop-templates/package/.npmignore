@@ -1,0 +1,11 @@
+# ignore the .ts files
+*.ts
+tsconfig.json
+
+# include the .d.ts files
+!*.d.ts
+
+# 
+*-test.*
+
+*.log

@@ -25,6 +25,11 @@ export default function (plop) {
         path: "packages/{{packageName}}/tsconfig.json",
         templateFile: "plop-templates/package/tsconfig.json",
       },
+      {
+        type: "add",
+        path: "packages/{{packageName}}/.npmignore",
+        templateFile: "plop-templates/package/npmignore",
+      },
     ],
   });
 }
