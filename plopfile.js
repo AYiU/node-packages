@@ -11,24 +11,15 @@ export default function (plop) {
     ],
     actions: [
       {
-        type: "add",
-        path: "packages/{{packageName}}/{{packageName}}.ts",
-        templateFile: "plop-templates/package/package-name.ts",
+        type: "addMany",
+        templateFiles: "plop-templates/package/(.|)*",
+        destination: "packages/{{packageName}}",
+        base: "plop-templates/package",
       },
       {
         type: "add",
-        path: "packages/{{packageName}}/package.json",
-        templateFile: "plop-templates/package/package.json.hbs",
-      },
-      {
-        type: "add",
-        path: "packages/{{packageName}}/tsconfig.json",
-        templateFile: "plop-templates/package/tsconfig.json",
-      },
-      {
-        type: "add",
-        path: "packages/{{packageName}}/.npmignore",
-        templateFile: "plop-templates/package/npmignore",
+        path: "packages/{{packageName}}/src/{{packageName}}.ts",
+        templateFile: "plop-templates/packageT/package-name.ts.hbs",
       },
     ],
   });
