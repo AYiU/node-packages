@@ -1,0 +1,22 @@
+{
+  "name": "@yiuayiu/rest",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/rest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "AYiU <npm@ayiu.net>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@yiuayiu/functions": "workspace:^0.0.1",
+    "axios": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9"
+  }
+}
