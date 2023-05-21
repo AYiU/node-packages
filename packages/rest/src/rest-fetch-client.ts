@@ -1,28 +1,15 @@
-import axios, { AxiosRequestConfig } from "axios";
 import { RestSignature } from "./rest-signature.js";
 
-class RestClient {
-  private instance;
+export class FetchRestClient {
   private restSignature: RestSignature | null = null;
   constructor(
     private baseUrl: string = "",
-    token: string = "",
-    salt: string= ""
+    private token: string = "",
+    salt: string = ""
   ) {
     if (this.baseUrl.endsWith("/")) {
       this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
     }
-
-
-    let config: AxiosRequestConfig = {
-      baseURL: this.baseUrl,
-    };
-
-    if (token) {
-      config.headers = {};
-      config.headers["authorization"] = "Bearer " + token;
-    }
-    this.instance = axios.create(config);
 
     if (salt) {
       this.restSignature = new RestSignature(salt);
@@ -48,14 +35,28 @@ class RestClient {
     }
   }
 
-  async get<T = any>(path: string) {
-    let r = await this.instance.get<T>(path);
-    return r.data;
+  async get<T = any>(
+    path: string,
+    urlSearchParam: URLSearchParams | null = null,
+    revalidate = 300
+  ) {
+    const rr = await fetch(this.getUrl(path, urlSearchParam), {
+      method: "get",
+      headers: [["authorization", "Bearer " + this.token]],
+      next: { revalidate },
+    });
+
+    return rr.json() as T;
   }
 
   async post<T = any>(path: string, json: any) {
-    let r = await this.instance.post<T>(path, json);
-    return r.data;
+    const rr = await fetch(this.getUrl(path), {
+      method: "post",
+      body: json,
+      headers: [["authorization", "Bearer " + this.token]],
+    });
+
+    return rr.json() as T;
   }
 
   async signPost<T = any>(
@@ -70,19 +71,17 @@ class RestClient {
     return this.post<T>(path, postJson);
   }
 
-  /*
-  private static async processResponse<T = BaseResponse>(
-    response: Response
-  ): Promise<T> {
-    let body = await response.json();
-
-    if (1 === body.result) {
-      return body;
-    } else {
-      throw new Error(body.message);
+  getUrl(path: string, urlSearchParam: URLSearchParams|null = null) {
+    if (!path.startsWith("/")) {
+      path = "/" + path;
     }
-  }
-  */
-}
 
-export { RestClient };
+    let url = this.baseUrl + path;
+
+    if (urlSearchParam) {
+      url += "?" + urlSearchParam;
+    }
+
+    return url;
+  }
+}
