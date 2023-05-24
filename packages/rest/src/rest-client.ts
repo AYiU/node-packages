@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { RestSignature } from "./rest-signature.js";
 
-class RestClient {
+export class RestClient {
   private instance;
   private restSignature: RestSignature | null = null;
   constructor(
@@ -84,5 +84,3 @@ class RestClient {
   }
   */
 }
-
-export { RestClient };

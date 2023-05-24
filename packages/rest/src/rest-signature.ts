@@ -1,6 +1,6 @@
 import { sha1 } from "@yiuayiu/functions";
 
-class RestSignature {
+export class RestSignature {
   constructor(private salt: string = "") {
     if ("string" !== typeof salt || salt.length === 0) {
       throw new Error("Salt is empty");
@@ -42,5 +42,3 @@ class RestSignature {
     return _sign === sign;
   }
 }
-
-export { RestSignature };

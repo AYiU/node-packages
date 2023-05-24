@@ -1,3 +1,3 @@
-export * from "./rest-fetch-client";
-export * from "./rest-client";
-export * from "./rest-signature";
+export * from "./rest-fetch-client.js";
+export * from "./rest-client.js";
+export * from "./rest-signature.js";
