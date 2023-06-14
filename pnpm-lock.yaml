@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .: {}
@@ -9,6 +13,22 @@ importers:
       '@types/node':
         specifier: ^20.2.3
         version: 20.2.3
+
+  packages/get-pocket:
+    dependencies:
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0(debug@4.3.4)
+      debug:
+        specifier: ^4.3.4
+        version: 4.3.4
+    devDependencies:
+      '@types/debug':
+        specifier: ^4.1.8
+        version: 4.1.8
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.3.1
 
   packages/m3o-client:
     dependencies:
@@ -36,7 +56,7 @@ importers:
         version: link:../functions
       axios:
         specifier: ^1.4.0
-        version: 1.4.0
+        version: 1.4.0(debug@4.3.4)
     devDependencies:
       '@types/node':
         specifier: ^20.2.3
@@ -66,17 +86,27 @@ packages:
       '@types/ms': 0.7.31
     dev: true
 
+  /@types/debug@4.1.8:
+    resolution: {integrity: sha512-/vPO1EPOs306Cvhwv7KfVfYvOJqA/S/AXjaHQiJboCZzcNDb+TIJFN9/2C9DZ//ijSKWioNyUxD792QmDJ+HKQ==}
+    dependencies:
+      '@types/ms': 0.7.31
+    dev: true
+
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
   /@types/node@20.2.3:
     resolution: {integrity: sha512-pg9d0yC4rVNWQzX8U7xb4olIOFuuVL9za3bzMT2pu2SU0SNEi66i2qrvhE2qt0HvkhuCaWJu7pLNOt/Pj8BIrw==}
+    dev: true
+
+  /@types/node@20.3.1:
+    resolution: {integrity: sha512-EhcH/wvidPy1WeML3TtYFGR83UzjxeWRen9V402T8aUGYsCHOmfoisV3ZSg03gAFIbLq8TnWOJ0f4cALtnSEUg==}
 
   /@types/ws@7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 20.2.3
+      '@types/node': 20.3.1
     dev: false
 
   /asynckit@0.4.0:
@@ -100,7 +130,7 @@ packages:
       - debug
     dev: false
 
-  /axios@1.4.0:
+  /axios@1.4.0(debug@4.3.4):
     resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
     dependencies:
       follow-redirects: 1.15.2(debug@4.3.4)
