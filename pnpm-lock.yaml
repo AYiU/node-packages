@@ -8,6 +8,12 @@ importers:
 
   .: {}
 
+  packages/dayjs:
+    dependencies:
+      dayjs:
+        specifier: ^1.11.9
+        version: 1.11.9
+
   packages/functions:
     devDependencies:
       '@types/node':
@@ -182,6 +188,10 @@ packages:
   /content-type@1.0.4:
     resolution: {integrity: sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /dayjs@1.11.9:
+    resolution: {integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==}
     dev: false
 
   /debug@2.6.9:
