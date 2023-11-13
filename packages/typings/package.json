@@ -1,0 +1,15 @@
+{
+  "name": "@yiuayiu/typings",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "AYiU <npm@ayiu.net>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  }
+}
