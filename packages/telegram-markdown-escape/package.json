@@ -1,0 +1,16 @@
+{
+  "name": "@yiuayiu/telegram-markdown-escape",
+  "version": "0.0.1-1",
+  "type": "module",
+  "description": "",
+  "main": "dist/telegram-markdown-escape.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "AYiU <npm@ayiu.net>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  }
+}
