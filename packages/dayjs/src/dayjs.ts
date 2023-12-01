@@ -1,46 +1,50 @@
-import anotherDayjs from "dayjs";
+import dayjs, { PluginFunc } from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-anotherDayjs.extend(timezone);
-anotherDayjs.extend(utc);
-anotherDayjs.extend(relativeTime);
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.extend(relativeTime);
 
-export default function dayjs(
-  date?: string | number | anotherDayjs.Dayjs | Date | null | undefined
-) {
-  return anotherDayjs(date).tz("Asia/Hong_Kong");
-}
-
-export function formatDate(date: Date | null, defaultValue = "-") {
-  if (date) {
-    return dayjs(date).format("YYYY-MM-DD HH:mm");
-  } else {
-    return defaultValue;
+declare module "dayjs" {
+  interface Dayjs {
+    formatDate(defaultValue?: string): string;
+    fromNowX(defaultValue?: string): string;
+    displayDateOrTime(): string;
   }
 }
 
-export function displayDateOrTime(date: Date) {
-  const inputDay = dayjs(date);
+const plugin: PluginFunc = (option, dayjsClass, dayjsFactory) => {
+  dayjsClass.prototype.formatDate = function (defaultValue = "-") {
+    if (this.isValid()) {
+      return this.format("YYYY-MM-DD HH:mm");
+    } else {
+      return defaultValue;
+    }
+  };
 
-  if (!inputDay.isValid()) {
-    return "";
-  }
+  dayjsClass.prototype.fromNowX = function (defaultValue = "-") {
+    if (this.isValid()) {
+      return this.fromNow();
+    } else {
+      return defaultValue;
+    }
+  };
 
-  const now = dayjs();
+  dayjsClass.prototype.displayDateOrTime = function () {
+    if (!this.isValid()) {
+      return "";
+    }
 
-  if (now.diff(inputDay, "hour") > 24) {
-    return inputDay.format("YYYY-MM-DD");
-  } else {
-    return inputDay.format("HH:mm");
-  }
-}
+    const now = dayjs();
 
-export function fromNow(date: Date | null, defaultValue = "-") {
-  if (date) {
-    return dayjs(date).fromNow();
-  } else {
-    return defaultValue;
-  }
-}
+    if (now.diff(this, "hour") > 24) {
+      return this.format("YYYY-MM-DD");
+    } else {
+      return this.format("HH:mm");
+    }
+  };
+};
+
+export default plugin;
