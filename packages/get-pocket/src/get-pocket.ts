@@ -1,4 +1,3 @@
-import { JsObject, GenericJsObject } from "./common.js";
 import axios from "axios";
 import debugFunction from "debug";
 const debugRequest = debugFunction("GetPocket:request");
@@ -60,8 +59,8 @@ export interface IItemInfo {
   has_image: string;
   word_count: string;
   tags: Array<string> | string;
-  images: GenericJsObject<IItemInfoImage>;
-  videos: GenericJsObject<IItemInfoVideo>;
+  images: Record<string, IItemInfoImage>;
+  videos: Record<string, IItemInfoVideo>;
   /* undoc */
   time_added: string;
   time_updated: string;
@@ -79,7 +78,7 @@ export interface IItemInfo {
     width: string;
     height: string;
   };
-  authors?: GenericJsObject<GetResponseAuthor>;
+  authors?: Record<string, GetResponseAuthor>;
   domain_metadata?: {
     name: string;
     logo: string;
@@ -89,7 +88,7 @@ export interface IItemInfo {
 
 export interface GetResponse {
   status: number;
-  list: GenericJsObject<IItemInfo>;
+  list: Record<string, IItemInfo>;
 }
 
 export interface BatchActionParameter {
@@ -210,7 +209,7 @@ export class GetPocket {
     );
   }
 
-  async fetchRequestToken(state: JsObject | null = null) {
+  async fetchRequestToken(state: Record<string, any> | null = null) {
     let requestParam: { [key: string]: any } = {
       consumer_key: this.consumerKey,
       redirect_uri: this.redirectUri,
@@ -248,7 +247,7 @@ export class GetPocket {
     return this.accessToken;
   }
 
-  private makeAuthRequest<T = any>(url: string, payload: JsObject) {
+  private makeAuthRequest<T = any>(url: string, payload: Record<string, any>) {
     if (!payload["consumer_key"]) {
       payload["consumer_key"] = this.consumerKey;
     }
