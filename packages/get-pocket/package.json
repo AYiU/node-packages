@@ -1,6 +1,6 @@
 {
   "name": "@yiuayiu/get-pocket",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "type": "module",
   "description": "",
   "main": "dist/get-pocket.js",
