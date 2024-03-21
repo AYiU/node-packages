@@ -55,6 +55,12 @@ importers:
         specifier: ^4.1.7
         version: 4.1.7
 
+  packages/node-functions:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.30
+        version: 20.11.30
+
   packages/raindrop:
     dependencies:
       axios:
@@ -120,6 +126,12 @@ packages:
     resolution: {integrity: sha512-fRbIKb8C/Y2lXxB5eVMj4IU7xpdox0Lh8bUPEdtLysaylsml1hOOx1+STloRs/B9nf7C6kPRmmg/V7aQW7usNg==}
     dependencies:
       undici-types: 5.26.5
+
+  /@types/node@20.11.30:
+    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
 
   /@types/node@20.2.3:
     resolution: {integrity: sha512-pg9d0yC4rVNWQzX8U7xb4olIOFuuVL9za3bzMT2pu2SU0SNEi66i2qrvhE2qt0HvkhuCaWJu7pLNOt/Pj8BIrw==}
