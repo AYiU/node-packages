@@ -1,7 +1,7 @@
 {
   "name": "@yiuayiu/rest",
   "type": "module",
-  "version": "0.3.1",
+  "version": "0.4.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -14,10 +14,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@yiuayiu/functions": "workspace:^0.0.1-1",
-    "axios": "^1.4.0"
+    "@yiuayiu/functions": "workspace:0.0.1-1",
+    "axios": "^1.6.8"
   },
   "devDependencies": {
-    "@types/node": "^20.2.3"
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.4"
   }
 }

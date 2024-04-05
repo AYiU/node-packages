@@ -46,6 +46,10 @@ export class FetchRestClient {
       next: { revalidate },
     });
 
+    if (rr.status !== 200) {
+      throw new Error(`Failed to fetch ${path}, status: ${rr.status}`);
+    }
+
     return rr.json() as T;
   }
 
@@ -55,6 +59,10 @@ export class FetchRestClient {
       body: json,
       headers: [["authorization", "Bearer " + this.token]],
     });
+
+    if (rr.status !== 200) {
+      throw new Error(`Failed to fetch ${path}, status: ${rr.status}`);
+    }
 
     return rr.json() as T;
   }
