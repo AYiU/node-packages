@@ -4,7 +4,7 @@ const debugRequest = debugFunction("GetPocket:request");
 const debugReponse = debugFunction("GetPocket:response");
 
 export interface GetParameters {
-  state?: "all" | "unread" | "archive";
+  state?: "unread" | "archive" | "all";
   favorite?: number;
   tag?: string;
   contentType?: "article" | "video" | "image";
@@ -48,17 +48,18 @@ export interface IItemInfo {
   item_id: string;
   resolved_id: string;
   given_url: string;
-  given_title: string;
-  favorite: string;
-  status: string;
-  resolved_title: string;
   resolved_url: string;
+  given_title: string;
+  resolved_title: string;
+  favorite: "0" | "1";
+  status: "0" | "1" | "2";
   excerpt: string;
-  is_article: string;
-  has_video: string;
-  has_image: string;
+  is_article: "0" | "1";
+  has_image: "0" | "1" | "2";
+  has_video: "0" | "1" | "2";
   word_count: string;
   tags: Array<string> | string;
+  authors?: Record<string, GetResponseAuthor>;
   images: Record<string, IItemInfoImage>;
   videos: Record<string, IItemInfoVideo>;
   /* undoc */
@@ -78,7 +79,7 @@ export interface IItemInfo {
     width: string;
     height: string;
   };
-  authors?: Record<string, GetResponseAuthor>;
+
   domain_metadata?: {
     name: string;
     logo: string;
@@ -123,9 +124,8 @@ interface AuthResponse {
   username: string;
 }
 
-interface IAddResponse {
-  item: IItemInfo;
-  status: number;
+interface IAddResponse extends IItemInfo {
+  
 }
 
 export interface IBatchResponse {
@@ -174,10 +174,8 @@ export class GetPocket {
     title: string = "",
     tags: string | Array<string> = ""
   ) {
-    const payload = {
+    const payload:Record<string, string> = {
       url,
-      title: "",
-      tags: "",
     };
 
     if (title) {
@@ -210,7 +208,7 @@ export class GetPocket {
   }
 
   async fetchRequestToken(state: Record<string, any> | null = null) {
-    let requestParam: { [key: string]: any } = {
+    let requestParam: Record<string, any> = {
       consumer_key: this.consumerKey,
       redirect_uri: this.redirectUri,
     };
@@ -248,15 +246,13 @@ export class GetPocket {
   }
 
   private makeAuthRequest<T = any>(url: string, payload: Record<string, any>) {
-    if (!payload["consumer_key"]) {
-      payload["consumer_key"] = this.consumerKey;
-    }
+    const requestPayload = {
+      consumer_key: this.consumerKey,
+      access_token: this.accessToken,
+      ...payload,
+    };
 
-    if (!payload["access_token"]) {
-      payload["access_token"] = this.accessToken;
-    }
-
-    return this.makeRequest<T>(url, payload);
+    return this.makeRequest<T>(url, requestPayload);
   }
 
   private async makeRequest<T = any>(url: string, payload: object) {
