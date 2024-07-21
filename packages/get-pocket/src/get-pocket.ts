@@ -1,138 +1,16 @@
 import axios from "axios";
 import debugFunction from "debug";
+import {
+  AuthResponseType,
+  BatchActionParameterType,
+  BatchActionResponseType,
+  FetchRequestTokenType,
+  GetParametersType,
+  GetResponseType,
+  ItemInfoType,
+} from "./schema";
 const debugRequest = debugFunction("GetPocket:request");
 const debugReponse = debugFunction("GetPocket:response");
-
-export interface GetParameters {
-  state?: "unread" | "archive" | "all";
-  favorite?: number;
-  tag?: string;
-  contentType?: "article" | "video" | "image";
-  sort?: "newest" | "oldest" | "title" | "site";
-  detailType?: "simple" | "complete";
-  search?: string;
-  domain?: string;
-  since?: number;
-  count?: number;
-  offset?: number;
-}
-
-interface IItemInfoImage {
-  item_id: number;
-  image_id: string;
-  src: string;
-  width: string;
-  height: string;
-  credit: string;
-  caption: string;
-}
-
-interface IItemInfoVideo {
-  item_id: string;
-  video_id: string;
-  src: string;
-  width: string;
-  height: string;
-  type: string;
-  vid: string;
-}
-
-interface GetResponseAuthor {
-  item_id: string;
-  author_id: string;
-  name: string;
-  url: string;
-}
-
-export interface IItemInfo {
-  item_id: string;
-  resolved_id: string;
-  given_url: string;
-  resolved_url: string;
-  given_title: string;
-  resolved_title: string;
-  favorite: "0" | "1";
-  status: "0" | "1" | "2";
-  excerpt: string;
-  is_article: "0" | "1";
-  has_image: "0" | "1" | "2";
-  has_video: "0" | "1" | "2";
-  word_count: string;
-  tags: Array<string> | string;
-  authors?: Record<string, GetResponseAuthor>;
-  images: Record<string, IItemInfoImage>;
-  videos: Record<string, IItemInfoVideo>;
-  /* undoc */
-  time_added: string;
-  time_updated: string;
-  time_read: string;
-  time_favorited: string;
-  sort_id: number;
-  is_index: string;
-  lang: string;
-  amp_url?: string;
-  top_image_url: string;
-  listen_duration_estimate: number;
-  image?: {
-    item: string;
-    src: string;
-    width: string;
-    height: string;
-  };
-
-  domain_metadata?: {
-    name: string;
-    logo: string;
-    greyscale_logo: string;
-  };
-}
-
-export interface GetResponse {
-  status: number;
-  list: Record<string, IItemInfo>;
-}
-
-export interface BatchActionParameter {
-  action:
-    | "add"
-    | "archive"
-    | "readd"
-    | "favorite"
-    | "unfavorite"
-    | "delete"
-    | "tags_add"
-    | "tags_remove"
-    | "tags_replace"
-    | "tags_clear"
-    | "tags_rename"
-    | "tags_delete";
-  item_id?: number;
-  ref_id?: number;
-  tags?: string;
-  time?: Date;
-  title?: string;
-  url?: string;
-}
-
-interface FetchRequestToken {
-  code: string;
-  state?: string;
-}
-
-interface AuthResponse {
-  access_token: string;
-  username: string;
-}
-
-interface IAddResponse extends IItemInfo {
-  
-}
-
-export interface IBatchResponse {
-  action_results: Array<boolean | null>;
-  action_errors: Array<boolean | null>;
-  status: number;
-}
 
 export class GetPocket {
   private REQUEST_URL: string = "https://getpocket.com/v3/oauth/request";
@@ -160,10 +38,10 @@ export class GetPocket {
     return new BatchAction();
   }
 
-  async get(param: GetParameters = {}) {
+  async get(param: GetParametersType = {}) {
     var payload = { ...param };
 
-    return await this.makeAuthRequest<GetResponse>(
+    return await this.makeAuthRequest<GetResponseType>(
       "https://getpocket.com/v3/get",
       payload
     );
@@ -174,7 +52,7 @@ export class GetPocket {
     title: string = "",
     tags: string | Array<string> = ""
   ) {
-    const payload:Record<string, string> = {
+    const payload: Record<string, string> = {
       url,
     };
 
@@ -190,7 +68,7 @@ export class GetPocket {
       }
     }
 
-    return this.makeAuthRequest<IAddResponse>(
+    return this.makeAuthRequest<ItemInfoType>(
       "https://getpocket.com/v3/add",
       payload
     );
@@ -201,7 +79,7 @@ export class GetPocket {
       actions: batchAction.actions,
     };
 
-    return this.makeAuthRequest<IBatchResponse>(
+    return this.makeAuthRequest<BatchActionResponseType>(
       "https://getpocket.com/v3/send",
       payload
     );
@@ -217,7 +95,7 @@ export class GetPocket {
       requestParam["state"] = state;
     }
 
-    return await this.makeRequest<FetchRequestToken>(
+    return await this.makeRequest<FetchRequestTokenType>(
       this.REQUEST_URL,
       requestParam
     );
@@ -231,7 +109,7 @@ export class GetPocket {
   }
 
   async fetchAccessToken(code: string) {
-    return this.makeRequest<AuthResponse>(this.AUTH_URL, {
+    return this.makeRequest<AuthResponseType>(this.AUTH_URL, {
       consumer_key: this.consumerKey,
       code: code,
     });
@@ -272,7 +150,7 @@ export class GetPocket {
 }
 
 class BatchAction {
-  public actions: BatchActionParameter[] = [];
+  public actions: BatchActionParameterType[] = [];
 
   public add(url: string, title: string = "", tags: string[] = []) {
     this.actions.push({
