@@ -32,7 +32,10 @@ test("create item", async () => {
     "Testing"
   );
 
+  console.log(addResponse);
+
   expect(addResponse.status).toBe(1);
+  expect(addResponse.item).toBeDefined();
 
   const getResponse = await pocket.get({
     tag: "Testing",
@@ -42,7 +45,7 @@ test("create item", async () => {
   expect(Object.keys(getResponse.list)).toHaveLength(1);
 
   const batchAction = pocket.createBatchAction();
-  batchAction.delete(parseInt(addResponse.item_id));
+  batchAction.delete(parseInt(addResponse.item.item_id));
 
   const deleteResponse = await pocket.processBatchAction(batchAction);
 

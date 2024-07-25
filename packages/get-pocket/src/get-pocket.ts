@@ -1,6 +1,7 @@
 import axios from "axios";
 import debugFunction from "debug";
 import {
+  AddResponseType,
   AuthResponseType,
   BatchActionParameterType,
   BatchActionResponseType,
@@ -68,7 +69,7 @@ export class GetPocket {
       }
     }
 
-    return this.makeAuthRequest<ItemInfoType>(
+    return this.makeAuthRequest<AddResponseType>(
       "https://getpocket.com/v3/add",
       payload
     );

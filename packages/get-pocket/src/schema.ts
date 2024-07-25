@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const GetResponseAuthor  = z.object({
+export const GetResponseAuthor = z.object({
   item_id: z.string(),
   author_id: z.string(),
   name: z.string(),
@@ -103,6 +103,13 @@ export const GetResponse = z
   .extend({ list: z.record(z.string(), ItemInfo) });
 
 export type GetResponseType = z.infer<typeof GetResponse>;
+
+export const AddResponse = z.object({
+  item: ItemInfo,
+  status: z.coerce.number(),
+});
+
+export type AddResponseType = z.infer<typeof AddResponse>;
 
 export const BatchActionParameter = z.object({
   action: z.enum([
