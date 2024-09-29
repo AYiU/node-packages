@@ -154,13 +154,17 @@ class BatchAction {
   public actions: BatchActionParameterType[] = [];
 
   public add(url: string, title: string = "", tags: string[] = []) {
-    this.actions.push({
+    const payload: BatchActionParameterType = {
       action: "add",
       item_id: 0,
       url,
       title,
-      tags: tags.join(","),
-    });
+    };
+
+    if (tags.length > 0) {
+      payload["tags"] = tags.join(", ");
+    }
+    this.actions.push(payload);
   }
 
   public archive(itemId: number | string) {
