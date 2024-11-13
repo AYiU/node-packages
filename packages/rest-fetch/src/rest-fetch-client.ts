@@ -1,6 +1,6 @@
 import { RestSignature } from "./rest-signature.js";
 
-export class FetchRestClient {
+export class RestFetchClient {
   private restSignature: RestSignature | null = null;
   constructor(
     private baseUrl: string = "",
