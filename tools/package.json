@@ -1,0 +1,19 @@
+{
+  "name": "@yiuayiu/package-tools",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "",
+  "main": "dist/package-tools.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "AYiU <npm@ayiu.net>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "globby": "^14.0.2"
+  }
+}
