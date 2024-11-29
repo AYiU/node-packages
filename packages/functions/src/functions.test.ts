@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { md5, sha1 } from "./functions.js";
 
 test("sha1", () => {

@@ -46,9 +46,9 @@ const plugin: PluginFunc = (option, dayjsClass, dayjsFactory) => {
     }
   };
 
-  dayjsClass.prototype.displayDateOrTime = function () {
+  dayjsClass.prototype.displayDateOrTime = function (defaultValue = "") {
     if (!this.isValid()) {
-      return "";
+      return defaultValue;
     }
 
     const now = dayjs();
