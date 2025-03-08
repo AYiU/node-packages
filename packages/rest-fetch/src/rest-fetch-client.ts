@@ -38,12 +38,12 @@ export class RestFetchClient {
   async get<T = any>(
     path: string,
     urlSearchParam: URLSearchParams | null = null,
-    revalidate = 300,
+    requestConfig: NextFetchRequestConfig | undefined = undefined,
   ) {
     const rr = await fetch(this.getUrl(path, urlSearchParam), {
       method: "get",
       headers: [["authorization", `Bearer ${this.token}`]],
-      next: { revalidate },
+      next: requestConfig,
     });
 
     if (rr.status !== 200) {
