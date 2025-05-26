@@ -1,4 +1,4 @@
-import m3o from "@m3o/m3o-node";
+import type m3o from "@m3o/m3o-node";
 import Debug from "debug";
 
 const debugLog = Debug("m3o:file");
@@ -14,6 +14,7 @@ interface DefaultRequest {
   project: string;
 }
 
+// biome-ignore lint/suspicious/noEmptyInterface: <explanation>
 interface DefaultResponse {}
 
 interface ListResponse {
@@ -41,14 +42,14 @@ export class M3oFile {
 
   constructor(private client: m3o.Client) {}
 
-  async Delete(path: string, project: string = "default") {
-    let response = await this.client.call<DefaultRequest, DefaultResponse>(
+  async Delete(path: string, project = "default") {
+    const response = await this.client.call<DefaultRequest, DefaultResponse>(
       this.service,
       "Delete",
       {
         path,
         project,
-      }
+      },
     );
 
     debugLog("Delete response", response);
@@ -56,11 +57,11 @@ export class M3oFile {
     return true;
   }
 
-  async List(path: string = "/", project: string = "default") {
-    let response = await this.client.call<DefaultRequest, ListResponse>(
+  async List(path = "/", project = "default") {
+    const response = await this.client.call<DefaultRequest, ListResponse>(
       this.service,
       "List",
-      { path, project }
+      { path, project },
     );
 
     debugLog("List response", response);
@@ -68,11 +69,11 @@ export class M3oFile {
     return response.files;
   }
 
-  async Read(path: string, project: string = "default") {
-    let response = await this.client.call<DefaultRequest, ReadResponse>(
+  async Read(path: string, project = "default") {
+    const response = await this.client.call<DefaultRequest, ReadResponse>(
       this.service,
       "Read",
-      { path, project }
+      { path, project },
     );
 
     debugLog("Read response", response);
@@ -80,11 +81,11 @@ export class M3oFile {
     return response.file;
   }
 
-  async Save(path: string, content: string, project: string = "default") {
-    let response = await this.client.call<SaveRequest, SaveReponse>(
+  async Save(path: string, content: string, project = "default") {
+    const response = await this.client.call<SaveRequest, SaveReponse>(
       this.service,
       "Save",
-      { file: { path, project, content } }
+      { file: { path, project, content } },
     );
 
     debugLog("Save response", response);

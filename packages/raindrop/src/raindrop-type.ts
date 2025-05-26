@@ -64,6 +64,7 @@ export interface IRaindrop {
   domain: string;
   creatorRef: ICreatorRef;
   sort: number;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   highlights: any[];
   collectionId: number;
 }

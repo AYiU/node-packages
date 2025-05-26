@@ -1,32 +1,37 @@
 import { sha1 } from "@yiuayiu/functions";
 
 export class RestSignature {
-  constructor(private salt: string = "") {
+  constructor(private salt = "") {
     if ("string" !== typeof salt || salt.length === 0) {
       throw new Error("Salt is empty");
     }
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   getSignature(obj: any, keyToSign: string[] | null) {
-    let payload: any[] = [];
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const payload: any[] = [];
 
-    if (keyToSign === null) {
-      keyToSign = Object.keys(obj);
+    let inKeyToSign = keyToSign;
+    if (inKeyToSign === null) {
+      inKeyToSign = Object.keys(obj);
     }
 
-    for (let i = 0; i < keyToSign.length; i++) {
-      payload.push(obj[keyToSign[i]]);
+    for (let i = 0; i < inKeyToSign.length; i++) {
+      payload.push(obj[inKeyToSign[i]]);
     }
 
     return sha1(this.salt + JSON.stringify(payload));
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   signObject(obj: any, keyToSign: string[] | null = null) {
-    if (keyToSign === null) {
-      keyToSign = Object.keys(obj);
+    let inKeyToSign = keyToSign;
+    if (inKeyToSign === null) {
+      inKeyToSign = Object.keys(obj);
     }
 
-    let sign = this.getSignature(obj, keyToSign);
+    const sign = this.getSignature(obj, keyToSign);
     return {
       ...obj,
       _sign: sign,
@@ -34,10 +39,11 @@ export class RestSignature {
     };
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   verifyObject(obj: any) {
-    let { _sign, _key, ...rest } = obj;
+    const { _sign, _key, ...rest } = obj;
 
-    let sign = this.getSignature(rest, _key);
+    const sign = this.getSignature(rest, _key);
 
     return _sign === sign;
   }

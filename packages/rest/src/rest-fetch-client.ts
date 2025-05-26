@@ -3,9 +3,9 @@ import { RestSignature } from "./rest-signature.js";
 export class FetchRestClient {
   private restSignature: RestSignature | null = null;
   constructor(
-    private baseUrl: string = "",
-    private token: string = "",
-    salt: string = ""
+    private baseUrl = "",
+    private token = "",
+    salt = "",
   ) {
     if (this.baseUrl.endsWith("/")) {
       this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
@@ -17,7 +17,7 @@ export class FetchRestClient {
   }
 
   static factoryFromEnv() {
-    let endpoint = process.env.API_ENDPOINT;
+    const endpoint = process.env.API_ENDPOINT;
 
     if (!endpoint) {
       throw new Error("API_ENDPOINT not set in env");
@@ -29,20 +29,20 @@ export class FetchRestClient {
     }
 
     if (process.env.REST_SIGNATURE) {
-      return new this(endpoint, token, process.env.REST_SIGNATURE);
-    } else {
-      return new this(endpoint, token);
+      return new FetchRestClient(endpoint, token, process.env.REST_SIGNATURE);
     }
+    return new FetchRestClient(endpoint, token);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async get<T = any>(
     path: string,
     urlSearchParam: URLSearchParams | null = null,
-    revalidate = 300
+    revalidate = 300,
   ) {
     const rr = await fetch(this.getUrl(path, urlSearchParam), {
       method: "get",
-      headers: [["authorization", "Bearer " + this.token]],
+      headers: [["authorization", `Bearer ${this.token}`]],
       next: { revalidate },
     });
 
@@ -53,11 +53,12 @@ export class FetchRestClient {
     return rr.json() as T;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async post<T = any>(path: string, json: any) {
     const rr = await fetch(this.getUrl(path), {
       method: "post",
       body: json,
-      headers: [["authorization", "Bearer " + this.token]],
+      headers: [["authorization", `Bearer ${this.token}`]],
     });
 
     if (rr.status !== 200) {
@@ -67,27 +68,29 @@ export class FetchRestClient {
     return rr.json() as T;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async signPost<T = any>(
     path: string,
-    json: any,
-    keyToSign: string[] | null = null
+    json: unknown,
+    keyToSign: string[] | null = null,
   ) {
     if (null === this.restSignature) {
       throw new Error("`Salt` is not defined in constructor");
     }
-    let postJson = this.restSignature.signObject(json, keyToSign);
+    const postJson = this.restSignature.signObject(json, keyToSign);
     return this.post<T>(path, postJson);
   }
 
-  getUrl(path: string, urlSearchParam: URLSearchParams|null = null) {
+  getUrl(inPath: string, urlSearchParam: URLSearchParams | null = null) {
+    let path = inPath;
     if (!path.startsWith("/")) {
-      path = "/" + path;
+      path = `/${path}`;
     }
 
     let url = this.baseUrl + path;
 
     if (urlSearchParam) {
-      url += "?" + urlSearchParam;
+      url += `?${urlSearchParam}`;
     }
 
     return url;

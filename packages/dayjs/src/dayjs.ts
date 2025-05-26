@@ -1,4 +1,4 @@
-import dayjs, { PluginFunc, ConfigType, Dayjs } from "dayjs";
+import dayjs, { type PluginFunc } from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -33,17 +33,15 @@ const plugin: PluginFunc = (option, dayjsClass, dayjsFactory) => {
   dayjsClass.prototype.formatDate = function (defaultValue = "-") {
     if (this.isValid()) {
       return this.format("YYYY-MM-DD HH:mm");
-    } else {
-      return defaultValue;
     }
+    return defaultValue;
   };
 
   dayjsClass.prototype.fromNowX = function (defaultValue = "-") {
     if (this.isValid()) {
       return this.fromNow();
-    } else {
-      return defaultValue;
     }
+    return defaultValue;
   };
 
   dayjsClass.prototype.displayDateOrTime = function (defaultValue = "") {
@@ -55,9 +53,8 @@ const plugin: PluginFunc = (option, dayjsClass, dayjsFactory) => {
 
     if (now.diff(this, "hour") > 24) {
       return this.format("YYYY-MM-DD");
-    } else {
-      return this.format("HH:mm");
     }
+    return this.format("HH:mm");
   };
 };
 

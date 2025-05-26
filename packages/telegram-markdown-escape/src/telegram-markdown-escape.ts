@@ -1,8 +1,8 @@
 export function markdownEscape(
   string: string,
-  extra: (string | RegExp)[][] = []
+  extra: (string | RegExp)[][] = [],
 ) {
-  let escapes = [
+  const escapes = [
     [/\\/g, "\\\\"],
     [/\*/g, "\\*"],
     [/^-/g, "\\-"],
@@ -21,9 +21,10 @@ export function markdownEscape(
     ...extra,
   ];
 
-  return escapes.reduce(function (accumulator, escape) {
-    return accumulator.replace(escape[0], escape[1] as string);
-  }, string);
+  return escapes.reduce(
+    (accumulator, x) => accumulator.replace(x[0], x[1] as string),
+    string,
+  );
 }
 
 export function telegramMarkdownEscape(string: string) {
@@ -37,7 +38,5 @@ export function telegramMarkdownEscape(string: string) {
     [/#/g, "\\#"],
   ];
 
-  string = markdownEscape(string, extra);
-
-  return string;
+  return markdownEscape(string, extra);
 }

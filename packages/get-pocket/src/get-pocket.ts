@@ -1,6 +1,6 @@
 import axios from "axios";
 import debugFunction from "debug";
-import {
+import type {
   AddResponseType,
   AuthResponseType,
   BatchActionParameterType,
@@ -8,30 +8,32 @@ import {
   FetchRequestTokenType,
   GetParametersType,
   GetResponseType,
-  ItemInfoType,
 } from "./schema";
 const debugRequest = debugFunction("GetPocket:request");
 const debugReponse = debugFunction("GetPocket:response");
 
 export class GetPocket {
-  private REQUEST_URL: string = "https://getpocket.com/v3/oauth/request";
+  private REQUEST_URL = "https://getpocket.com/v3/oauth/request";
   private POCKET_REDIRECT_URL =
     "https://getpocket.com/auth/authorize?request_token={code}&redirect_uri={redirect}";
   private AUTH_URL = "https://getpocket.com/v3/oauth/authorize";
 
-  private accessToken: string = "";
+  private accessToken = "";
 
   private fullDebug = false;
 
-  constructor(private consumerKey: string, private redirectUri: string) {}
+  constructor(
+    private consumerKey: string,
+    private redirectUri: string,
+  ) {}
 
   static factoryFromEnv() {
     const pocket = new GetPocket(
-      process.env.POCKET_CONSUMER_KEY!,
-      process.env.POCKET_REDIRECT_URL!
+      process.env.POCKET_CONSUMER_KEY || "",
+      process.env.POCKET_REDIRECT_URL || "",
     );
 
-    pocket.setAccessToken(process.env.POCKET_ACCESS_TOKEN!);
+    pocket.setAccessToken(process.env.POCKET_ACCESS_TOKEN || "");
     return pocket;
   }
 
@@ -40,38 +42,34 @@ export class GetPocket {
   }
 
   async get(param: GetParametersType = {}) {
-    var payload = { ...param };
+    const payload = { ...param };
 
     return await this.makeAuthRequest<GetResponseType>(
       "https://getpocket.com/v3/get",
-      payload
+      payload,
     );
   }
 
-  async add(
-    url: string,
-    title: string = "",
-    tags: string | Array<string> = ""
-  ) {
+  async add(url: string, title = "", tags: string | Array<string> = "") {
     const payload: Record<string, string> = {
       url,
     };
 
     if (title) {
-      payload["title"] = title;
+      payload.title = title;
     }
 
     if (tags) {
       if (Array.isArray(tags)) {
-        payload["tags"] = tags.join(", ");
+        payload.tags = tags.join(", ");
       } else {
-        payload["tags"] = tags;
+        payload.tags = tags;
       }
     }
 
     return this.makeAuthRequest<AddResponseType>(
       "https://getpocket.com/v3/add",
-      payload
+      payload,
     );
   }
 
@@ -82,30 +80,32 @@ export class GetPocket {
 
     return this.makeAuthRequest<BatchActionResponseType>(
       "https://getpocket.com/v3/send",
-      payload
+      payload,
     );
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async fetchRequestToken(state: Record<string, any> | null = null) {
-    let requestParam: Record<string, any> = {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const requestParam: Record<string, any> = {
       consumer_key: this.consumerKey,
       redirect_uri: this.redirectUri,
     };
 
     if (state) {
-      requestParam["state"] = state;
+      requestParam.state = state;
     }
 
     return await this.makeRequest<FetchRequestTokenType>(
       this.REQUEST_URL,
-      requestParam
+      requestParam,
     );
   }
 
   getRedirectUrl(code: string) {
     return this.POCKET_REDIRECT_URL.replace("{code}", code).replace(
       "{redirect}",
-      this.redirectUri
+      this.redirectUri,
     );
   }
 
@@ -124,6 +124,7 @@ export class GetPocket {
     return this.accessToken;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   private makeAuthRequest<T = any>(url: string, payload: Record<string, any>) {
     const requestPayload = {
       consumer_key: this.consumerKey,
@@ -134,10 +135,11 @@ export class GetPocket {
     return this.makeRequest<T>(url, requestPayload);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   private async makeRequest<T = any>(url: string, payload: object) {
     debugRequest(url, payload);
 
-    let response = await axios.post<T>(url, payload, {
+    const response = await axios.post<T>(url, payload, {
       headers: {
         contentType: "application/json; charset=UTF-8",
         "X-Accept": "application/json",
@@ -153,7 +155,7 @@ export class GetPocket {
 class BatchAction {
   public actions: BatchActionParameterType[] = [];
 
-  public add(url: string, title: string = "", tags: string[] = []) {
+  public add(url: string, title = "", tags: string[] = []) {
     const payload: BatchActionParameterType = {
       action: "add",
       item_id: 0,
@@ -162,14 +164,15 @@ class BatchAction {
     };
 
     if (tags.length > 0) {
-      payload["tags"] = tags.join(", ");
+      payload.tags = tags.join(", ");
     }
     this.actions.push(payload);
   }
 
-  public archive(itemId: number | string) {
+  public archive(inItemId: number | string) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "archive",
@@ -177,9 +180,10 @@ class BatchAction {
     });
   }
 
-  public readd(itemId: number | string) {
+  public readd(inItemId: number | string) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "readd",
@@ -187,9 +191,10 @@ class BatchAction {
     });
   }
 
-  public favorite(itemId: number | string) {
+  public favorite(inItemId: number | string) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "favorite",
@@ -197,9 +202,10 @@ class BatchAction {
     });
   }
 
-  public unfavorite(itemId: number | string) {
+  public unfavorite(inItemId: number | string) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "unfavorite",
@@ -214,9 +220,10 @@ class BatchAction {
     });
   }
 
-  public addTags(itemId: number | string, tags: string[]) {
+  public addTags(inItemId: number | string, tags: string[]) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "tags_add",
@@ -225,9 +232,10 @@ class BatchAction {
     });
   }
 
-  public removeTags(itemId: number | string, tags: string[]) {
+  public removeTags(inItemId: number | string, tags: string[]) {
+    let itemId = inItemId;
     if (typeof itemId === "string") {
-      itemId = parseInt(itemId);
+      itemId = Number.parseInt(itemId);
     }
     this.actions.push({
       action: "tags_remove",

@@ -1,7 +1,7 @@
 import {RestSignature} from "./rest-signature.js";
 
 
-let p = {
+const p = {
   social: "github",
   user: "ayiu",
   date: "2022-01-02T13:41:15.944Z",
@@ -9,7 +9,7 @@ let p = {
   _key: ["social", "user", "date"],
 };
 
-let rs = new RestSignature("dwt9JHV2pyt-vym0acxdwt9JHV2pyt-vym0acx");
-let r = rs.verifyObject(p);
+const rs = new RestSignature("dwt9JHV2pyt-vym0acxdwt9JHV2pyt-vym0acx");
+const r = rs.verifyObject(p);
 
 console.log({r});

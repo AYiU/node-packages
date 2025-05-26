@@ -1,4 +1,4 @@
-import m3o from "@m3o/m3o-node";
+import type m3o from "@m3o/m3o-node";
 
 interface DeleteRequest {
   key: string;
@@ -24,12 +24,14 @@ interface GetRequest {
 
 interface GetResponse {
   key: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   value: any;
   ttl: number;
 }
 
 interface SetRequest {
   key: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   value: any;
   ttl?: number;
 }
@@ -38,7 +40,8 @@ interface SetResponse {
   status: "ok";
 }
 
-interface ListKeyRequest {}
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+type ListKeyRequest = {}
 
 interface ListKeyResponse {
   key: string[];
@@ -54,59 +57,58 @@ export class M3oCache {
 
     if (value) {
       return JSON.parse(value);
-    } else {
-      value = await func();
-      await this.Set(key, JSON.stringify(value), ttl);
-
-      return value;
     }
+    value = await func();
+    await this.Set(key, JSON.stringify(value), ttl);
+
+    return value;
   }
 
   async Delete(key: string) {
-    let response = await this.client.call<DeleteRequest, DeleteResponse>(
+    const response = await this.client.call<DeleteRequest, DeleteResponse>(
       this.service,
       "Delete",
       {
         key,
-      }
+      },
     );
 
     return "ok" === response.status;
   }
 
   async Increment(key: string, value: number) {
-    let response = await this.client.call<NumberRequest, NumberResponse>(
+    const response = await this.client.call<NumberRequest, NumberResponse>(
       this.service,
       "Increment",
       {
         key,
         value,
-      }
+      },
     );
 
     return response.value;
   }
 
   async Decrement(key: string, value: number) {
-    let response = await this.client.call<NumberRequest, NumberResponse>(
+    const response = await this.client.call<NumberRequest, NumberResponse>(
       this.service,
       "Decrement",
       {
         key,
         value,
-      }
+      },
     );
 
     return response.value;
   }
 
   async Get(key: string) {
-    let response = await this.client.call<GetRequest, GetResponse>(
+    const response = await this.client.call<GetRequest, GetResponse>(
       this.service,
       "Get",
       {
         key,
-      }
+      },
     );
 
     return response.value;
@@ -115,26 +117,26 @@ export class M3oCache {
   async Set<T = string>(
     key: string,
     value: T,
-    ttl: number | undefined = undefined
+    ttl: number | undefined = undefined,
   ) {
-    let response = await this.client.call<SetRequest, SetResponse>(
+    const response = await this.client.call<SetRequest, SetResponse>(
       this.service,
       "Set",
       {
         key,
         value,
         ttl,
-      }
+      },
     );
 
     return "ok" === response.status;
   }
 
   async ListKey() {
-    let response = await this.client.call<ListKeyRequest, ListKeyResponse>(
+    const response = await this.client.call<ListKeyRequest, ListKeyResponse>(
       this.service,
       "ListKey",
-      {}
+      {},
     );
 
     return response.key;

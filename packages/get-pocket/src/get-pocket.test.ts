@@ -22,10 +22,10 @@ import { GetPocket } from "./get-pocket";
  */
 test("create item", async () => {
   const pocket = new GetPocket(
-    process.env.POCKET_CONSUMER_KEY!,
-    process.env.POCKET_REDIRECT_URL!
+    process.env.POCKET_CONSUMER_KEY || "",
+    process.env.POCKET_REDIRECT_URL || ""
   );
-  pocket.setAccessToken(process.env.POCKET_ACCESS_TOKEN!);
+  pocket.setAccessToken(process.env.POCKET_ACCESS_TOKEN || "");
 
   const addResponse = await pocket.add(
     "https://ayiu.net/article/2e4440c6ba991e496d72992315d4f8e5",
@@ -46,7 +46,7 @@ test("create item", async () => {
   expect(Object.keys(getResponse.list)).toHaveLength(1);
 
   const batchAction = pocket.createBatchAction();
-  batchAction.delete(parseInt(addResponse.item.item_id));
+  batchAction.delete(Number.parseInt(addResponse.item.item_id));
 
   const deleteResponse = await pocket.processBatchAction(batchAction);
 

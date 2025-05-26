@@ -1,26 +1,25 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { type AxiosRequestConfig } from "axios";
 import { RestSignature } from "./rest-signature.js";
 
 export class RestClient {
   private instance;
   private restSignature: RestSignature | null = null;
   constructor(
-    private baseUrl: string = "",
-    token: string = "",
-    salt: string= ""
+    private baseUrl = "",
+    token = "",
+    salt = "",
   ) {
     if (this.baseUrl.endsWith("/")) {
       this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
     }
 
-
-    let config: AxiosRequestConfig = {
+    const config: AxiosRequestConfig = {
       baseURL: this.baseUrl,
     };
 
     if (token) {
       config.headers = {};
-      config.headers["authorization"] = "Bearer " + token;
+      config.headers.authorization = `Bearer ${token}`;
     }
     this.instance = axios.create(config);
 
@@ -30,7 +29,7 @@ export class RestClient {
   }
 
   static factoryFromEnv() {
-    let endpoint = process.env.API_ENDPOINT;
+    const endpoint = process.env.API_ENDPOINT;
 
     if (!endpoint) {
       throw new Error("API_ENDPOINT not set in env");
@@ -42,31 +41,33 @@ export class RestClient {
     }
 
     if (process.env.REST_SIGNATURE) {
-      return new this(endpoint, token, process.env.REST_SIGNATURE);
-    } else {
-      return new this(endpoint, token);
+      return new RestClient(endpoint, token, process.env.REST_SIGNATURE);
     }
+    return new RestClient(endpoint, token);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async get<T = any>(path: string) {
-    let r = await this.instance.get<T>(path);
+    const r = await this.instance.get<T>(path);
     return r.data;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async post<T = any>(path: string, json: any) {
-    let r = await this.instance.post<T>(path, json);
+    const r = await this.instance.post<T>(path, json);
     return r.data;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   async signPost<T = any>(
     path: string,
-    json: any,
-    keyToSign: string[] | null = null
+    json: Record<string, unknown>,
+    keyToSign: string[] | null = null,
   ) {
     if (null === this.restSignature) {
       throw new Error("`Salt` is not defined in constructor");
     }
-    let postJson = this.restSignature.signObject(json, keyToSign);
+    const postJson = this.restSignature.signObject(json, keyToSign);
     return this.post<T>(path, postJson);
   }
 

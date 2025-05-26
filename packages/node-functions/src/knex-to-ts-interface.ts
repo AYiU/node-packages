@@ -1,4 +1,4 @@
-import { Knex } from "knex";
+import type { Knex } from "knex";
 
 const stringType = [
   "text",
@@ -25,14 +25,16 @@ interface ShowColumnsFields {
 }
 
 export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
-  let tables = await knex.raw("SHOW TABLES");
-  let colKey = tables[1][0]["name"];
+  const tables = await knex.raw("SHOW TABLES");
+  const colKey = tables[1][0].name;
   let output = "";
 
   for (let t = 0; t < tables[0].length; t++) {
-    let table = tables[0][t][colKey];
+    const table = tables[0][t][colKey];
 
-    let r = await knex.raw<ShowColumnsFields[][]>("SHOW columns FROM " + table);
+    const r = await knex.raw<ShowColumnsFields[][]>(
+      `SHOW columns FROM ${table}`,
+    );
 
     const rowData = r[0];
     const buffer: string[] = [];
@@ -67,7 +69,8 @@ export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
       ) {
         tsType = "number";
       } else if (colInfo.Type.startsWith("enum")) {
-        tsType = eval("test" + colInfo.Type);
+        // biome-ignore lint/security/noGlobalEval: <explanation>
+        tsType = eval(`test${colInfo.Type}`);
       } else if (dateType.indexOf(colInfo.Type) !== -1) {
         tsType = "Date";
       } else {
@@ -76,10 +79,10 @@ export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
       }
 
       if (tsType) {
-        let optional = "YES" === colInfo.Null ? "?" : "";
+        const optional = "YES" === colInfo.Null ? "?" : "";
 
         buffer.push(
-          `  ${formatFieldName(colInfo.Field)}${optional}: ${tsType};`
+          `  ${formatFieldName(colInfo.Field)}${optional}: ${tsType};`,
         );
       }
 
@@ -101,9 +104,8 @@ export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
 function formatFieldName(name: string) {
   if (name.indexOf("-") !== -1) {
     return `"${name}"`;
-  } else {
-    return name;
   }
+  return name;
 }
 
 /**
@@ -111,8 +113,10 @@ function formatFieldName(name: string) {
  * @returns
  */
 function testenum() {
-  let f: string[] = [];
+  const f: string[] = [];
+  // biome-ignore lint/style/noArguments: <explanation>
   for (let i = 0; i < arguments.length; i++) {
+    // biome-ignore lint/style/noArguments: <explanation>
     f.push(`"${arguments[i]}"`);
   }
 

@@ -1,24 +1,27 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 export class RaindropAuth {
   private baseUrl = "https://raindrop.io";
   private redirectUri = "https://ayiu.net/";
   private axios: AxiosInstance;
 
-  constructor(private clientId: string, private clientSecret: string) {
+  constructor(
+    private clientId: string,
+    private clientSecret: string,
+  ) {
     this.axios = axios.create({ baseURL: this.baseUrl });
   }
 
   getAuthorizationRequestUrl() {
-    let s = new URLSearchParams();
+    const s = new URLSearchParams();
     s.set("client_id", this.clientId);
     s.set("redirect_uri", this.redirectUri);
-    let url = "https://raindrop.io/oauth/authorize?" + s;
+    const url = `https://raindrop.io/oauth/authorize?${s}`;
     return url;
   }
 
   async getRefreshToken(code: string) {
-    let body = {
+    const body = {
       grant_type: "authorization_code",
       code,
       client_id: this.clientId,
@@ -29,8 +32,9 @@ export class RaindropAuth {
     return this.postRequest("/oauth/access_token", body);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   private async postRequest<R>(path: string, body: any) {
-    let response = await this.axios.post<R>(path, body);
+    const response = await this.axios.post<R>(path, body);
     return response.data;
   }
 }

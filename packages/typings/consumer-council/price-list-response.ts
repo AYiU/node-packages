@@ -2,8 +2,10 @@ export interface ConsumerCouncilPriceListResponse {
   result: boolean;
   redirect: string;
   sysmsg: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   errors: any[];
   data: Datum[];
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   filter: any[];
   total: number;
   more: boolean;

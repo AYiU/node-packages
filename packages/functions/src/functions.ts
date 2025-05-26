@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 export function sha1(string: crypto.BinaryLike) {
   return crypto.createHash("sha1").update(string).digest("hex");
