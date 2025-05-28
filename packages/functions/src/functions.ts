@@ -1,9 +1,18 @@
-import crypto from "node:crypto";
+const { subtle } = globalThis.crypto;
 
-export function sha1(string: crypto.BinaryLike) {
-  return crypto.createHash("sha1").update(string).digest("hex");
+export async function sha1(string: string) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(string);
+  const hashBuffer = await subtle.digest("SHA-1", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
-export function md5(string: crypto.BinaryLike) {
-  return crypto.createHash("md5").update(string).digest("hex");
+export async function md5(string: string): Promise<string> {
+  // Web Crypto API doesn't support MD5 directly as it's considered insecure
+  // This would require a separate implementation or a library
+  throw new Error(
+    "MD5 is not supported by Web Crypto API due to security concerns",
+  );
 }
