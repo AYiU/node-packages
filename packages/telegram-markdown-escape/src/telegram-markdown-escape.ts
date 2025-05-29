@@ -36,6 +36,7 @@ export function telegramMarkdownEscape(string: string) {
     [/=/g, "\\="],
     [/>/g, "\\>"],
     [/#/g, "\\#"],
+    [/!/g, "\\!"],
   ];
 
   return markdownEscape(string, extra);
