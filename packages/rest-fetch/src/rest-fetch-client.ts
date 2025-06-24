@@ -82,7 +82,7 @@ export class RestFetchClient {
     if (null === this.restSignature) {
       throw new Error("`Salt` is not defined in constructor");
     }
-    const postJson = this.restSignature.signObject(json, keyToSign);
+    const postJson = await this.restSignature.signObject(json, keyToSign);
     return this.post<T>(path, postJson);
   }
 

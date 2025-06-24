@@ -25,25 +25,28 @@ export class RestSignature {
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  signObject(obj: any, keyToSign: string[] | null = null) {
+  async signObject(
+    obj: any,
+    keyToSign: string[] | null = null,
+  ) {
     let inKeyToSign = keyToSign;
     if (inKeyToSign === null) {
       inKeyToSign = Object.keys(obj);
     }
 
-    const sign = this.getSignature(obj, keyToSign);
+    const sign = await this.getSignature(obj, inKeyToSign);
     return {
       ...obj,
       _sign: sign,
-      _key: keyToSign,
+      _key: inKeyToSign,
     };
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  verifyObject(obj: any) {
+  async verifyObject(obj: any) {
     const { _sign, _key, ...rest } = obj;
 
-    const sign = this.getSignature(rest, _key);
+    const sign = await this.getSignature(rest, _key);
 
     return _sign === sign;
   }

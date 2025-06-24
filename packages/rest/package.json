@@ -1,11 +1,11 @@
 {
   "name": "@yiuayiu/rest",
   "type": "module",
-  "version": "0.4.1",
+  "version": "0.5.2",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "AYiU <npm@ayiu.net>",
@@ -14,11 +14,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@yiuayiu/functions": "workspace:0.0.1-1",
-    "axios": "^1.6.8"
+    "@yiuayiu/functions": "workspace:*",
+    "axios": "^1.10.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.4"
+    "@types/node": "^24.0.3",
+    "vitest": "^3.2.4"
   }
 }
