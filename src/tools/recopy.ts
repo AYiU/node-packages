@@ -1,6 +1,6 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 import { globby } from "globby";
-import path from "path";
-import fs from "fs/promises";
 
 const packages = await globby("../../packages/*", { onlyDirectories: true });
 
