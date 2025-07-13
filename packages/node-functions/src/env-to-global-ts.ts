@@ -1,14 +1,21 @@
 import fs from "node:fs/promises";
 
-export async function envToGlobalTs(envFile: string, dTsFile: string) {
-  const body = await fs.readFile(envFile, "utf-8");
+export async function envToGlobalTs(
+  envFiles: string | string[],
+  dTsFile: string,
+) {
+  const bodies = await Promise.all(
+    (Array.isArray(envFiles) ? envFiles : [envFiles]).map((file) =>
+      fs.readFile(file, "utf-8"),
+    ),
+  );
 
-  const buffer = envToTsDefinition(body);
+  const buffer = envToTsDefinition(bodies.join("\n"));
 
   await fs.writeFile(dTsFile, buffer, "utf-8");
 }
 
-function envToTsDefinition(file: string) {
+export function envToTsDefinition(file: string) {
   const lines = file.split("\n");
   let buffer = "";
   buffer += "namespace NodeJS {\n";
@@ -29,6 +36,10 @@ function envToTsDefinition(file: string) {
     if (!buffer.endsWith("\n\n") && i < lines.length - 1) {
       buffer += "\n";
     }
+  }
+
+  if (!buffer.endsWith("\n")) {
+    buffer += "\n";
   }
 
   buffer += "  }\n";
