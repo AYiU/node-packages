@@ -64,7 +64,7 @@ export interface IRaindrop {
   domain: string;
   creatorRef: ICreatorRef;
   sort: number;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: -
   highlights: any[];
   collectionId: number;
 }
@@ -107,6 +107,14 @@ export interface Collection {
   author: boolean;
   color?: string;
 }
+
+export type ICreateCollection = Pick<
+  Collection,
+  "view" | "title" | "sort" | "cover"
+> & { "parent.$id"?: number };
+
+export type IUpdateCollection = ICreateCollection &
+  Pick<Collection, "expanded" | "public">;
 
 interface Access {
   for: number;

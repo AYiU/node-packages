@@ -32,7 +32,7 @@ export class RaindropAuth {
     return this.postRequest("/oauth/access_token", body);
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: *
   private async postRequest<R>(path: string, body: any) {
     const response = await this.axios.post<R>(path, body);
     return response.data;

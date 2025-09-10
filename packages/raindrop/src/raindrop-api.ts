@@ -20,7 +20,9 @@ export class RaindropApi {
 
   public getRootCollections() {
     const path = "/rest/v1/collections";
-    return this.getRequest<IGetRootCollectionsResponse>(path);
+    return this.getRequest<IGetRootCollectionsResponse>(
+      path,
+    );
   }
 
   public getChildCollections() {
@@ -35,7 +37,9 @@ export class RaindropApi {
 
   public getSystemCollectionsCount() {
     const path = "/rest/v1/user/stats";
-    return this.getRequest<IGetSystemCollectionsCount>(path);
+    return this.getRequest<IGetSystemCollectionsCount>(
+      path,
+    );
   }
 
   public getRaindrops(collectionId: number) {
@@ -48,18 +52,9 @@ export class RaindropApi {
     return this.getRequest<IGetRaindropResponse>(path);
   }
 
-  private async getRequest<R>(
-    path: string,
-    searchParams: URLSearchParams | null = null
-  ) {
+  private async getRequest<R>(path: string) {
     const response = await this.axios.get<R>(path);
 
-    return response.data;
-  }
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  private async postRequest<R>(path: string, body: any) {
-    const response = await axios.post<R>(path, body);
     return response.data;
   }
 }
