@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 export async function envToGlobalTs(
   envFiles: string | string[],
   dTsFile: string,
+  prefix = "",
 ) {
   const bodies = await Promise.all(
     (Array.isArray(envFiles) ? envFiles : [envFiles]).map((file) =>
@@ -10,7 +11,11 @@ export async function envToGlobalTs(
     ),
   );
 
-  const buffer = envToTsDefinition(bodies.join("\n"));
+  let buffer = envToTsDefinition(bodies.join("\n"));
+
+  if (prefix) {
+    buffer = `${prefix}\n${buffer}`;
+  }
 
   await fs.writeFile(dTsFile, buffer, "utf-8");
 }
