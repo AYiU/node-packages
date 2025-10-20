@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/complexity/noArguments: Check later */
 import type { Knex } from "knex";
 
 const stringType = [
@@ -24,7 +25,7 @@ interface ShowColumnsFields {
   Extra: string;
 }
 
-export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
+export async function generateTsInterfaceFromMySql(knex: Knex) {
   const tables = await knex.raw("SHOW TABLES");
   const colKey = tables[1][0].name;
   let output = "";
@@ -69,10 +70,12 @@ export async function generateTsInterfaceFromMySql(knex: Knex, saveAs: string) {
       ) {
         tsType = "number";
       } else if (colInfo.Type.startsWith("enum")) {
-        // biome-ignore lint/security/noGlobalEval: <explanation>
+        // biome-ignore lint/security/noGlobalEval: -
         tsType = eval(`test${colInfo.Type}`);
       } else if (dateType.indexOf(colInfo.Type) !== -1) {
         tsType = "Date";
+      } else if ("json" === colInfo.Type) {
+        tsType = "any";
       } else {
         console.log(table, colInfo);
         throw new Error("Unknown type");
@@ -112,11 +115,11 @@ function formatFieldName(name: string) {
  * Use below : tsType = eval("test" + colInfo.Type);
  * @returns
  */
+// biome-ignore lint/correctness/noUnusedVariables: called by eval
 function testenum() {
   const f: string[] = [];
-  // biome-ignore lint/style/noArguments: <explanation>
+
   for (let i = 0; i < arguments.length; i++) {
-    // biome-ignore lint/style/noArguments: <explanation>
     f.push(`"${arguments[i]}"`);
   }
 
