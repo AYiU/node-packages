@@ -5,6 +5,7 @@
   "description": "",
   "main": "dist/telegram-markdown-escape.js",
   "scripts": {
+    "build": "tsc -b",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,5 +13,8 @@
   "license": "ISC",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
   }
 }

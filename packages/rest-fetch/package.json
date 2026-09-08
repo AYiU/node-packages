@@ -5,6 +5,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w",
     "test": "vitest"
   },
   "keywords": [],
@@ -17,7 +19,8 @@
     "@yiuayiu/functions": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^20.17.6",
-    "vitest": "^3.2.4"
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   }
 }

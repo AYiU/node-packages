@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import plugins from "./dayjs";
-import { test, expect } from "vitest";
+import { expect, test } from "vitest";
+import plugins from "./dayjs.js";
 
 dayjs.extend(plugins);
 

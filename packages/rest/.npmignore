@@ -1,9 +1,0 @@
-tsconfig.json
-
-src/
-
-# 
-*-test.*
-*.test.*
-
-*.log

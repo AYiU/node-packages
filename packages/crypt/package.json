@@ -5,6 +5,8 @@
   "description": "",
   "main": "dist/crypt.js",
   "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w",
     "test": "vitest"
   },
   "keywords": [],
@@ -14,7 +16,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^20.9.3",
-    "vitest": "^2.1.6"
+    "@types/node": "^26.4.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   }
 }

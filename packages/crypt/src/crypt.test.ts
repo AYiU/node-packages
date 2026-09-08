@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { Crypt } from "./crypt";
+import { Crypt } from "./crypt.js";
 
 test("Encrypt and decrypt text", () => {
   const crypt = new Crypt("testing-testing-testing-testing-");

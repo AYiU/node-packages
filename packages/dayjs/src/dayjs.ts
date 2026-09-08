@@ -1,7 +1,7 @@
 import dayjs, { type PluginFunc } from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import relativeTime from "dayjs/plugin/relativeTime";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+import timezone from "dayjs/plugin/timezone.js";
+import utc from "dayjs/plugin/utc.js";
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
@@ -29,7 +29,7 @@ declare module "dayjs" {
   // const tz: DayjsTimezone;
 }
 
-const plugin: PluginFunc = (option, dayjsClass, dayjsFactory) => {
+const plugin: PluginFunc = (_option, dayjsClass, _dayjsFactory) => {
   dayjsClass.prototype.formatDate = function (defaultValue = "-") {
     if (this.isValid()) {
       return this.format("YYYY-MM-DD HH:mm");
